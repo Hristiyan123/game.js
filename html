@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="game.js/hero.js"></script>
+    <script src="game.js/enemy.js"></script>
+    <script src="/game.js/game.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="header">
+        <p>Welcome</p>
+        <h2 class="headText">Choose your fighter!</h2>
+    </div>
+
+    <div class="interface">
+        <a href="#" onclick="gameManager.setGameStart('Warrior')" id="warriorSelection">
+            <img src="Hero/warrior.png" alt="Warrior">
+            <div class="name">
+                <h3>Warrior</h3>
+                <p>Warrior have higher health and stamina, however, their strength also makes them slower.</p>
+            </div>
+        </a>
+
+        <a href="#" onclick="gameManager.setGameStart('Rogue')" id="rogueSelection">
+            <img src="Hero/rogue.png" alt="Rogue">
+            <div class="name">
+                <h3>Rogue</h3>
+                <p>Rogues are fast and have high stamina and speed which makes up for their lack in strength and health.</p>
+            </div>
+        </a>
+
+        <a href="#" onclick="gameManager.setGameStart('Mage')" id="mageSelection">
+            <img src="Hero/mage.png" alt="Mage">
+            <div class="name">
+                <h3>Mage</h3>
+                <p>Mages are glass cannons which put all effort into spells. This means they lack in other attributes.</p>
+            </div>
+        </a>
+
+        <a href="#" onclick="gameManager.setGameStart('Archer')" id="archerSelection">
+            <img src="Hero/archer.png" alt="Archer">
+            <div class="name">
+                <h3>Archer</h3>
+                <p>Archers are well-rounded fighters that focus on balancing out their skills.</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="ATTACK"></div>
+
+    <div class="arena"></div>
+
+    <div class="enemy"></div>
+
+    <div class="player"></div>
+</body>
+
+</html>
