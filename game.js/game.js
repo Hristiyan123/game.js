@@ -1,13 +1,28 @@
 class GameManager {
     constructor() {
         this.battleManager = new BattleManager();
+        this.fightMechanicsMap = {
+            Warrior: WarriorFightMechanics,
+            Rogue: RogueFightMechanics,
+            Mage: MageFightMechanics,
+            Archer: ArcherFightMechanics,
+        };
     }
 
     setGameStart(classType) {
+        this.currentClassType = classType;
         const player = this.battleManager.resetPlayer(classType);
         this.battleManager.startFight(classType);
         UIManager.removeInterfaceElements(classType);
-        UIManager.updatePlayerInfo(player)
+        UIManager.updatePlayerInfo(player);
+
+
+        const FightMechanics = this.fightMechanicsMap[classType];
+        if (FightMechanics) {
+            const fightMechanics = new FightMechanics(player);
+        } else {
+            console.error(`Invalid class type: ${classType}`);
+        }
     }
 }
 
@@ -82,7 +97,7 @@ class BattleManager {
     }
 
     resetPlayer(classType) {
-        switch (classType) {
+        switch (classType) {  //Health, mana, strengh, agility, speed
             case "Warrior":
                 return new Player(classType, 900, 200, 700, 300, 400);
             case "Rogue":
@@ -102,9 +117,114 @@ class BattleManager {
     }
 }
 
+class WarriorFightMechanics {
+    constructor(player) {
+        this.player = player;
+        this.initializeStats();
+    }
 
+    initializeStats() {
+        console.log(this.player.classType)
+
+    }
+
+    //calculateAttackDamage() {
+    //    if (gameManager.currentClassType === "Warrior") {
+
+    //        return this.player.strength;
+      //  }
+    //}
+
+    //performSpecialAbility() {
+      //  if (gameManager.currentClassType === "Warrior") {
+
+        //}
+   // }
+}
+
+class RogueFightMechanics {
+    constructor(player) {
+        this.player = player;
+        this.initializeStats();
+    }
+
+    initializeStats() {
+        if (gameManager.currentClassType === "Rogue") {
+
+            console.log(this.player.classType)
+
+        }
+    }
+
+   // calculateAttackDamage() {
+     //   if (gameManager.currentClassType === "Rogue") {
+
+       //     return this.player.strength;
+        //}
+    //}
+
+  //  performSpecialAbility() {
+    //    if (gameManager.currentClassType === "Rogue") {
+            
+      //  }
+   // }
+}
+
+class ArcherFightMechanics {
+    constructor(player) {
+        this.player = player;
+        this.initializeStats();
+    }
+
+    initializeStats() {
+        if (gameManager.currentClassType === "Archer") {
+           
+            console.log(this.player.classType)
+
+        }
+    }
+
+   // calculateAttackDamage() {
+     //   if (gameManager.currentClassType === "Archer") {
+
+       //     return this.player.strength;
+  //      }
+    //}
+
+ //   performSpecialAbility() {
+   //     if (gameManager.currentClassType === "Archer") {
+
+     //   }
+    //}
+}
+
+
+class MageFightMechanics {
+    constructor(player) {
+        this.player = player;
+        this.initializeStats();
+    }
+
+    initializeStats() {
+        if (gameManager.currentClassType === "Mage") {
+
+            console.log(this.player.classType)
+
+        }
+    }
+
+ //   calculateAttackDamage() {
+   //     if (gameManager.currentClassType === "Mage") {
+
+     //       return this.player.strength;
+       // }
+   // }
+
+    //performSpecialAbility() {
+      //  if (gameManager.currentClassType === "Mage") {
+
+        //}
+    //}
+}
 
 const gameManager = new GameManager();
-
-
-
