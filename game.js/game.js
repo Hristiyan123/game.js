@@ -15,16 +15,17 @@ class GameManager {
         this.battleManager.startFight(classType);
         UIManager.removeInterfaceElements(classType);
         UIManager.updatePlayerInfo(player);
-
-
+    
         const FightMechanics = this.fightMechanicsMap[classType];
         if (FightMechanics) {
-            const fightMechanics = new FightMechanics(player);
+            this.fightMechanics = new FightMechanics(player, this.battleManager.getRandomEnemy()); // Pass the enemy instance
         } else {
             console.error(`Invalid class type: ${classType}`);
         }
     }
+    
 }
+    
 
 
 class UIManager {
@@ -43,23 +44,24 @@ class UIManager {
 
     static updateAttackButton(enemy) {
         const getATTACK = document.querySelector(".ATTACK");
-        getATTACK.innerHTML = `<a href="#" class="btn-prefight" onclick="PlayerMoves.calcAttack(${enemy})">Attack</a>`;
+        getATTACK.innerHTML = `<a href="#" class="btn-prefight" onclick="gameManager.fightMechanics.calculateAttackDamage()">Attack</a>`;
     }
+    
 
-    static updateEnemyInfo(enemy) {
-        const getEnemy = document.querySelector(".enemy");
-        getEnemy.innerHTML = `
-            <img src="enemy/${enemy.enemyType.toLowerCase()}.png" alt="${enemy.enemyType}" class="img-avatar">
-            <div>
-                <h3>${enemy.enemyType}</h3>
-                <p class="health-enemy">Health: ${enemy.health}</p>
-                <p>Mana: ${enemy.mana}</p>
-                <p>Strength: ${enemy.strength}</p>
-                <p>Agility: ${enemy.agility}</p>
-                <p>Speed: ${enemy.speed}</p>
-            </div>
-        `;
-    }
+        static updateEnemyInfo(enemy) {
+            const getEnemy = document.querySelector(".enemy");
+            getEnemy.innerHTML = `
+                <img src="enemy/${enemy.enemyType.toLowerCase()}.png" alt="${enemy.enemyType}" class="img-avatar">
+                <div>
+                    <h3>${enemy.enemyType}</h3>
+                    <p class="health-enemy">Health: ${enemy.health}</p>
+                    <p>Mana: ${enemy.mana}</p>
+                    <p>Strength: ${enemy.strength}</p>
+                    <p>Agility: ${enemy.agility}</p>
+                    <p>Speed: ${enemy.speed}</p>
+                </div>
+            `;
+        }
 
 
     static updatePlayerInfo(player) {
@@ -76,7 +78,14 @@ class UIManager {
             </div>
         `;
     }
+
+    static displayVictoryMessage() {
+        const getATTACK = document.querySelector(".ATTACK");
+        getATTACK.innerHTML = '<p class="victory-message">You won!</p>';
+
+    }
 }
+
 
 class BattleManager {
     constructor() {
@@ -118,60 +127,103 @@ class BattleManager {
 }
 
 class WarriorFightMechanics {
-    constructor(player) {
+    constructor(player, enemy) {
         this.player = player;
+        this.enemy = enemy;
         this.initializeStats();
     }
 
     initializeStats() {
-        console.log(this.player.classType)
-
+        console.log(this.player.classType);
     }
 
-    //calculateAttackDamage() {
-    //    if (gameManager.currentClassType === "Warrior") {
+    calculateAttackDamage() {
+        if (gameManager.currentClassType === "Warrior") {
+            console.log("Enemy before attack:", this.enemy);
+            console.log("Player strength:", this.player.strength);
+        
+            let currentEnemyHealth = this.enemy.health;
+            const damage = this.player.strength;
+            console.log("Calculating damage:", damage);
+        
+            currentEnemyHealth -= damage;
+            currentEnemyHealth = Math.max(currentEnemyHealth, 0);
+            console.log("Updated enemy health:", currentEnemyHealth);
+    
+            this.checkEnemyHealth(currentEnemyHealth);
+        }    
+    }
+    
+    checkEnemyHealth(currentEnemyHealth) {
+        if (currentEnemyHealth === 0) {
+            UIManager.displayVictoryMessage();
+        } else {
+            this.enemy.health = currentEnemyHealth;
+            UIManager.updateEnemyInfo(this.enemy);
+        }
+    }
+    
+    
 
-    //        return this.player.strength;
-      //  }
-    //}
-
-    //performSpecialAbility() {
-      //  if (gameManager.currentClassType === "Warrior") {
-
-        //}
-   // }
+    performSpecialAbility() {
+        if (gameManager.currentClassType === "Warrior") {
+            // Implement the special ability logic if needed
+        }
+    }
 }
 
+
 class RogueFightMechanics {
-    constructor(player) {
+    constructor(player, enemy) {
         this.player = player;
+        this.enemy = enemy
         this.initializeStats();
     }
 
     initializeStats() {
         if (gameManager.currentClassType === "Rogue") {
-
+            
             console.log(this.player.classType)
 
         }
     }
 
-   // calculateAttackDamage() {
-     //   if (gameManager.currentClassType === "Rogue") {
+    calculateAttackDamage() {
+        if (gameManager.currentClassType === "Rogue") {
+            console.log("Enemy before attack:", this.enemy);
+            console.log("Player strength:", this.player.strength);
+        
+            let currentEnemyHealth = this.enemy.health;
+            const damage = this.player.strength;
+            console.log("Calculating damage:", damage);
+        
+            currentEnemyHealth -= damage;
+            currentEnemyHealth = Math.max(currentEnemyHealth, 0);
+            console.log("Updated enemy health:", currentEnemyHealth);
+    
+            this.checkEnemyHealth(currentEnemyHealth);
+        }
+    }
 
-       //     return this.player.strength;
-        //}
-    //}
+    checkEnemyHealth(currentEnemyHealth) {
+        if (currentEnemyHealth === 0) {
+            UIManager.displayVictoryMessage();
+        } else {
+            this.enemy.health = currentEnemyHealth;
+            UIManager.updateEnemyInfo(this.enemy);
+        }
+    }
 
-  //  performSpecialAbility() {
-    //    if (gameManager.currentClassType === "Rogue") {
+    performSpecialAbility() {
+        if (gameManager.currentClassType === "Rogue") {
             
-      //  }
-   // }
+        }
+   }
 }
 
 class ArcherFightMechanics {
-    constructor(player) {
+    constructor(player, enemy) {
+        this.enemy = enemy
         this.player = player;
         this.initializeStats();
     }
@@ -184,24 +236,44 @@ class ArcherFightMechanics {
         }
     }
 
-   // calculateAttackDamage() {
-     //   if (gameManager.currentClassType === "Archer") {
+    calculateAttackDamage() {
+        if (gameManager.currentClassType === "Archer") {
+            console.log("Enemy before attack:", this.enemy);
+            console.log("Player strength:", this.player.strength);
+        
+            let currentEnemyHealth = this.enemy.health;
+            const damage = this.player.strength;
+            console.log("Calculating damage:", damage);
+        
+            currentEnemyHealth -= damage;
+            currentEnemyHealth = Math.max(currentEnemyHealth, 0);
+            console.log("Updated enemy health:", currentEnemyHealth);
+    
+            this.checkEnemyHealth(currentEnemyHealth);
+        }
+    }
 
-       //     return this.player.strength;
-  //      }
-    //}
+    checkEnemyHealth(currentEnemyHealth) {
+        if (currentEnemyHealth === 0) {
+            UIManager.displayVictoryMessage();
+        } else {
+            this.enemy.health = currentEnemyHealth;
+            UIManager.updateEnemyInfo(this.enemy);
+        }
+    }
 
- //   performSpecialAbility() {
-   //     if (gameManager.currentClassType === "Archer") {
+    performSpecialAbility() {
+        if (gameManager.currentClassType === "Archer") {
 
-     //   }
-    //}
+        }
+    }
 }
 
 
 class MageFightMechanics {
-    constructor(player) {
+    constructor(player, enemy) {
         this.player = player;
+        this.enemy = enemy
         this.initializeStats();
     }
 
@@ -213,18 +285,37 @@ class MageFightMechanics {
         }
     }
 
- //   calculateAttackDamage() {
-   //     if (gameManager.currentClassType === "Mage") {
+    calculateAttackDamage() {
+        if (gameManager.currentClassType === "Mage") {
+            console.log("Enemy before attack:", this.enemy);
+            console.log("Player mana:", this.player.mana);
+        
+            let currentEnemyHealth = this.enemy.health;
+            const damage = this.player.mana;
+            console.log("Calculating damage:", damage);
+        
+            currentEnemyHealth -= damage;
+            currentEnemyHealth = Math.max(currentEnemyHealth, 0);
+            console.log("Updated enemy health:", currentEnemyHealth);
+    
+            this.checkEnemyHealth(currentEnemyHealth);
+        }
+    }
 
-     //       return this.player.strength;
-       // }
-   // }
+    checkEnemyHealth(currentEnemyHealth) {
+        if (currentEnemyHealth === 0) {
+            UIManager.displayVictoryMessage();
+        } else {
+            this.enemy.health = currentEnemyHealth;
+            UIManager.updateEnemyInfo(this.enemy);
+        }
+    }
 
-    //performSpecialAbility() {
-      //  if (gameManager.currentClassType === "Mage") {
+    performSpecialAbility() {
+        if (gameManager.currentClassType === "Mage") {
 
-        //}
-    //}
+        }
+    }
 }
 
 const gameManager = new GameManager();
